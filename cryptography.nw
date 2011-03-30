@@ -2,3 +2,23 @@
 
 This is an experiment with literate programming, based around an
 attempt to understand and implement some cryptanalysis.
+
+<<cryptography.py>>=
+# Nothing implemented yet
+@ 
+
+\section{Testing}
+
+There should hopefully be unit tests that can be run to verify that
+everything tangled correctly. They could look something like this:
+
+<<tests.py>>=
+import unittest
+
+class CryptographyTest(unittest.TestCase):
+    pass
+
+if __name__ == '__main__':
+    unittest.main()
+@ 
+
