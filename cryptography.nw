@@ -3,8 +3,25 @@
 This is an experiment with literate programming, based around an
 attempt to understand and implement some cryptanalysis.
 
+\section{Cryptography basics}
+
+\subsection{S-boxes}
+
+An S-box is a simple function that substitutes one value for another
+in a fixed, key-independent way.
+
+Our S-box function should satsify the following test:
+
+<<testSBox>>=
+sbox = [2, 0, 3, 1]
+self.assertEqual(0, cryptography.substituteSBox(sbox, 1))
+@ 
+
 <<cryptography.py>>=
-# Nothing implemented yet
+#!/usr/bin/python
+
+def substituteSBox(sbox, index):
+    return sbox[index]
 @ 
 
 \section{Testing}
@@ -14,9 +31,11 @@ everything tangled correctly. They could look something like this:
 
 <<tests.py>>=
 import unittest
+import cryptography
 
 class CryptographyTest(unittest.TestCase):
-    pass
+    def testSBox(self):
+        <<testSBox>>
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,6 @@
 all: cryptography.html cryptography.py tests.py
 
-check: tests.py
+check: tests.py cryptography.py
 	python tests.py
 
 cryptography.html: cryptography.nw
