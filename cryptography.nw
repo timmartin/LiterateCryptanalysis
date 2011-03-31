@@ -45,12 +45,31 @@ def substituteSBox(sbox, index):
     return sbox[index]
 @ 
 
+This is the main code module itself, which isn't very interesting at
+all as it's just a way of sewing all the function definitions
+together.
+
 <<cryptography.py>>=
 #!/usr/bin/python
 
 <<substituteSBox>>
 <<isPowerOfTwo>>
 @ 
+
+\section{Cryptanalysis}
+
+\subsection{Linear cryptanalysis}
+Linear cryptanalysis is a statistical method of attack that attempts
+to exploit systematic weaknesses in the algorithm that, combined with
+known plaintexts, can reveal some key information without the need for
+brute force.
+
+It proceeds by attempting to define linear equations of bits, of the
+form:
+
+\[
+A \oplus B \oplus \dots \oplus Z = 0
+\]
 
 \section{Testing}
 
