@@ -1,10 +1,13 @@
-all: cryptography.html cryptography.py tests.py
+all: cryptography.py tests.py cryptography.pdf
 
 check: tests.py cryptography.py
 	python tests.py
 
-cryptography.html: cryptography.nw
-	noweave -filter l2h -index -html cryptography.nw > cryptography.html
+cryptography.latex: cryptography.nw
+	noweave -index cryptography.nw > cryptography.latex
+
+cryptography.pdf: cryptography.latex
+	pdflatex cryptography.latex
 
 cryptography.py: cryptography.nw
 	notangle -Rcryptography.py cryptography.nw > cryptography.py
