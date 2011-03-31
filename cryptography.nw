@@ -14,14 +14,42 @@ Our S-box function should satsify the following test:
 
 <<testSBox>>=
 sbox = [2, 0, 3, 1]
-self.assertEqual(0, cryptography.substituteSBox(sbox, 1))
+self.assertEqual(0, substituteSBox(sbox, 1))
+@ 
+
+We require that every S-box has a size that is a power of two. We use
+this little utility function to verify whether a number is a power of
+two:
+
+<<isPowerOfTwo>>=
+def isPowerOfTwo(n):
+    if n % 2 != 0:
+        return False
+
+    if n == 2:
+        return True
+
+    return isPowerOfTwo(n / 2)
+@ 
+
+Note that this only works if a positive integer is passed to it, which
+is kind of lame. Even zero trips it up.
+
+Substituting into an S-box is trivial:
+
+<<substituteSBox>>=
+def substituteSBox(sbox, index):
+    if not isPowerOfTwo(len(sbox)):
+        raise ValueError
+
+    return sbox[index]
 @ 
 
 <<cryptography.py>>=
 #!/usr/bin/python
 
-def substituteSBox(sbox, index):
-    return sbox[index]
+<<substituteSBox>>
+<<isPowerOfTwo>>
 @ 
 
 \section{Testing}
@@ -31,11 +59,16 @@ everything tangled correctly. They could look something like this:
 
 <<tests.py>>=
 import unittest
-import cryptography
+from cryptography import substituteSBox
 
 class CryptographyTest(unittest.TestCase):
     def testSBox(self):
         <<testSBox>>
+
+    def testWronglySizedSBox(self):
+        sbox = [1, 2, 3]
+        self.assertRaises(ValueError,
+                          lambda: substituteSBox(sbox, 1))
 
 if __name__ == '__main__':
     unittest.main()
