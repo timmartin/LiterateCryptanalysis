@@ -1,3 +1,7 @@
 *.html
 *.py
 *.pyc
+*.latex
+*.pdf
+*.aux
+*.log
