@@ -90,22 +90,84 @@ Consider the 4-bit S-box:
 
 \[
 S = \begin{matrix}
-  [0, & 2, & 4, & 6, \\
+  [0, & 2, & 6, & 4, \\
   8, & 10, & 12, & 14, \\
-  1, & 3, & 5, & 7, \\
-  9, & 11, & 13, & 15]
+  1, & 5, & 3, & 7, \\
+  11, & 9, & 13, & 15]
   \end{matrix}
 \]
 
+This is certainly not a good S-box. It's pretty close to being just a
+simple 1-bit left rotation. If it were a simple rotation, then by some
+definitions it wouldn't even be regarded as an S-box.
+
 This S-box will be used to turn a 4-bit plaintext $(P_0, P_1, P_2,
-P_3)$ into a 4-bit cyphertext $(C_0, C_1, C_2, C_3)$. We can
-immediately see that if $P_0 =0$ then $C_3 = 0$. This gives us a
+P_3)$ into a 4-bit cyphertext $(Q_0, Q_1, Q_2, Q_3)$. We can
+immediately see that if $P_0 =0$ then $Q_3 = 0$. This gives us a
 linear equation for this S-box that is always satisfied, i.e. that has
 maximum bias:
 
 \[
-P_0 \oplus C_3 = 0
+P_0 \oplus Q_3 = 0
 \]
+
+Let's imagine that this S-box is used as part of a simple cryptosystem
+with a 4-bit key:
+
+\[
+C = K \oplus S(P)
+\]
+
+That is, the plaintext is first substituted into the S-box, then XORed
+with the key. We use $Q$ to refer to the result of the S-box, and $C$
+for the full cyphertext.
+
+We obtain a couple of known plaintexts:
+
+\begin{align}
+(P^1 = 6, & C^1 = 6) \\
+(P^2 = 10, & C^2 = 9)
+\end{align}
+
+With one known plaintext we could find the key via brute force, which
+for a 4-bit key would require 16 operations. The hope is that by
+employing linear cryptanalysis we can use the second known plaintext
+to cut down this number of operations.
+
+In fact, linear cryptanalysis is of course unnecessary. Since we know
+the S-box, we can calculate $S(P)$ for that plaintext, and then XOR it
+with the ciphertext to immediately recover the key. Obviously more
+sophisticated cryptosystems make this impossible by having multiple
+rounds where the intermediate values are unknown to us, so let's
+ignore this simple attack.
+
+Consider the linear equation:
+
+\[
+P_0 \oplus Q_3 = 0
+\]
+
+We know this will always be true. However, we don't know $Q_3$ (the
+fourth bit coming out of the S-box), only $C_3$ (the fourth bit of the
+cyphertext). But the cyphertext is just a linear combination of the
+corresponding bits of the key and the S-box output. Therefore we can
+construct a linear equation that will be satisfied:
+
+\[
+P_0 \oplus C_3 \oplus K_3 = 0
+\]
+
+Substituting in bits from our known plaintext yields a bit from the
+key:
+
+\[
+0 \oplus 0 \oplus K_3 = 0
+\]
+
+This immediately yields that the fourth bit of the key is $0$. We can
+brute-force the remaining bits of the key in just 8
+operations. Finding this key bit was just a single operation, so this
+has saved us time.
 
 \section{Testing}
 
